@@ -1,7 +1,15 @@
 const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
+const async = require('async');
 
-var async = require('async');
+
+/* Necesario para Google */
+const jwt = require('jsonwebtoken');
+const fs = require('fs');
+const {google} = require('googleapis');
+const API_VERSION = 'v1';
+const DISCOVERY_API = 'https://cloudiot.googleapis.com/$discovery/rest';
+
 
 /* Autenticación cuando se trata de un servidor propio */ 
 /* Ver mas en: https://firebase.google.com/docs/firestore/quickstart?authuser=0 */
@@ -14,6 +22,13 @@ admin.initializeApp({
 var db = admin.firestore();
 // La siguiente linea evita el mensaje largo de rutura y comportamiento....
 db.settings({timestampsInSnapshots: true});
+
+
+
+
+
+
+
 
 
 
@@ -44,7 +59,7 @@ exports.index = function(req, res, next) {
 
       measurementsRef.get()
       .then((snapshot) => {
-          res.render('index', {title: "Documentos Firebase", doc_list: snapshot.docs});
+          res.render('index', {title: "Panel de Control - PRUEBA", doc_list: snapshot.docs});
           //console.log(snapshot);
           snapshot.forEach((doc) => {
               console.log(doc.id, '=>', doc.data());
@@ -55,3 +70,8 @@ exports.index = function(req, res, next) {
       });
 
 };
+
+
+exports.config_form_post = function(req, res, next) {   
+    res.send('NOT IMPLEMENTED: Config Update POST');
+}

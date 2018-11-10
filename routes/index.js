@@ -7,4 +7,7 @@ var index_controller = require('../controllers/indexController.js');
 /* GET home page. */
 router.get('/', index_controller.index);
 
+/* POST home page. */
+router.post('/', index_controller.config_form_post);
+
 module.exports = router;
