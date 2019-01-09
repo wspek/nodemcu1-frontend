@@ -1,8 +1,38 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  /*padding: 50px;*/
+  /*font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;*/
+  background-color: rgb(255, 255, 255);
 }
 
 a {
   color: #00B7FF;
 }
+
+.sidebar-nav {
+  margin-top: 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.tituloPrincipal {
+  width: 100%;
+  background-color: rgb(30, 158, 243);
+}
+
+/* Las siguientes clases son para la sección de ESTADO */
+.etiquetaEstado {
+  width: 100px;
+  text-align: right;
+}
+
+.valorEstado {
+  text-align: left;
+  font-weight: bold;
+}
+
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+

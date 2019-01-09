@@ -8,6 +8,12 @@ var app = require('../app');
 var debug = require('debug')('nodemcu1-frontend:server');
 var http = require('http');
 
+// Los paquetes a instalar son: npm install --save socket.io para el servidor (API por ejemplo)
+//                              npm install --save socket.io-client para el cliente (Consume la API)
+// Y no olvidar incluir también ésta libreria (cliente) en la página del navegador.
+var socketIO = require('socket.io');
+
+
 /**
  * Get port from environment and store in Express.
  */
@@ -20,6 +26,22 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+/**
+ * Agregado por Paco para utilizar Socket.IO
+ */
+const io = socketIO(server);
+// Ponemos a escuchar ciertos eventos
+io.on("connection", socket => {
+  // console.log("New client connected: ", socket), setInterval(
+  //   () => getApiAndEmit(socket),
+  //   10000
+  // );
+  debug("New client connected: ", socket);
+  socket.on("disconnect", () => console.log("Client disconnected"));
+});
+debug('Establecido el Socket.IO');
+
 
 /**
  * Listen on provided port, on all network interfaces.

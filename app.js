@@ -7,7 +7,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
-//var usersRouter = require('./routes/users');
+var apiRouter = require('./routes/api');
+var dashboardRouter = require('./routes/dashboard');
+var infoRouter = require('./routes/info')
+
 
 var app = express();
 
@@ -21,13 +24,28 @@ app.set('view engine', 'pug');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+// Coloco capa middleware para servir archivos estáticos con express.static()
+app.use('/public', express.static('public'));
+/* However, the path that you provide to the express.static function is relative 
+ * to the directory from where you launch your node process. If you run the express 
+ * app from another directory, it’s safer to use the absolute path of the directory 
+ * that you want to serve:
+ *     app.use('/static', express.static(path.join(__dirname, 'public')));
+ */
+
+
+// Rutas
 app.use('/', indexRouter);
-//app.use('/users', usersRouter);
+app.use('/api', apiRouter);
+app.use('/dashboard', dashboardRouter);
+app.use('/info', infoRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
