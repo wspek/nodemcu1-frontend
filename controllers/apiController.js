@@ -216,3 +216,58 @@ exports.lastState = function(req, res, next) {
       });
 };
 
+
+exports.lastState_post = function(req, res, next) {
+  const deviceId = req.params.deviceId;
+  const parentName = `projects/${PROJECT_ID}/locations/${CLOUD_REGION}`;
+  const registryName = `${parentName}/registries/${REGISTRY_ID}`;
+
+  const data = { 
+    greenLedState: req.body.greenLedState,
+    bicolorLedState: req.body.bicolorLedState,
+    msInterval: req.body.msInterval 
+  };
+
+  //res.send(JSON.stringify(data));
+
+
+  google.auth.getClient({
+      scopes: ['https://www.googleapis.com/auth/cloud-platform']
+    }).then((authClient) => {
+      const discoveryUrl = `${DISCOVERY_API}?version=${API_VERSION}`;
+  
+      google.options({
+        auth: authClient
+      });
+  
+      google.discoverAPI(discoveryUrl).then((client) => {
+        // Tenemos la credencial, ahora llamamos a la api de lista de estados
+        const binaryData = Buffer.from(JSON.stringify(data)).toString('base64');
+        const request = {
+          name: `${registryName}/devices/${deviceId}`,
+          versionToUpdate: 0,
+          'binaryData': binaryData
+        };
+      
+        client.projects.locations.registries.devices.modifyCloudToDeviceConfig(request,
+          (err, data) => {
+            if (err) {
+              console.log('Could not update config:', deviceId);
+              console.log('Message: ', err);
+              res.json( { error: `Could not update config: ${err}` } );
+            } else {
+              console.log('Success :', data);
+              res.json({ "result": 'OK', "error": 0, "data": data.data });
+            }
+          });
+
+      }).catch((err) => {
+        console.log('Error during API discovery.', err);
+        res.json( { error: `Error during API discovery: ${err}` } );
+      });
+    });
+};
+
+
+      
+

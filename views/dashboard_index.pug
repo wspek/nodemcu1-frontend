@@ -14,16 +14,17 @@ block content
     div(class='col')
       block seccionConfiguracion
         h2(class="text-center") Sección de Configuración
-        form(method='POST' action='')
-        div.form-group
-          label(for='led_state') Estado del LED:
-          select#led_state.form-control(type='select' placeholder='Seleccione Estado' name='led_state' required='true')
-            option(value='0') Apagado
-            option(value='1') Endendido
-        div.form-group
-          label(for='interval') Intervalo de envío de las mediciones [segundos]:
-          input#interval.form-control(type='number' placeholder='Intervalo en segundos' name='interval' required='true' min='1' max='600' value='300')
-        button.btn.btn-primary(type='submit') Submit
+        form(method='POST', action='')
+          div.form-group
+            label(for='led_state') Estado del LED:
+            select#led_state.form-control(type='select' placeholder='Seleccione Estado' name='led_state' required='true')
+              option(value='0') Apagado
+              option(value='1') Endendido
+          div.form-group
+            label(for='interval') Intervalo de envío de las mediciones [segundos]:
+            input#interval.form-control(type='number' placeholder='Intervalo en segundos' name='interval' required='true' min='1' max='600' value='300')
+          button.btn.btn-primary(type='submit') Enviar
+        
         if errors 
           ul
             for error in errors

@@ -16,9 +16,10 @@ var db = admin.firestore();
 // La siguiente linea evita el mensaje largo de rutura y comportamiento....
 db.settings({timestampsInSnapshots: true});
 
-var intervalHandler;
 
 exports.index = function(req, res, next) {
+
+//    res.render('dashboard_estado', {estado: {"greenLedState": 1, "bicolorLedState": 0, "msInterval": 30000}});
 
   //Step 1 - Set the headers
 var headers = {
@@ -74,7 +75,7 @@ exports.config_form_post = [
         // Extract the validation errors from a request.
         const errors = validationResult(req);
 
-        var newConfig = {"ledState": req.body.led_state, "msInterval": (req.body.interval*1000)};
+        var newConfig = {"greenLedState": req.body.led_state, "bicolorLedState": 0, "msInterval": (req.body.interval*1000)};
 
         const cb = function (client) {
         setDeviceConfig(

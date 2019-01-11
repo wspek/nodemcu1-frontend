@@ -1,6 +1,7 @@
 body {
   /*padding: 50px;*/
   /*font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;*/
+  font: Roboto;
   background-color: rgb(255, 255, 255);
 }
 
@@ -16,7 +17,8 @@ a {
 
 .tituloPrincipal {
   width: 100%;
-  background-color: rgb(30, 158, 243);
+  background-color: rgb(0, 118, 197);
+  color: white;
 }
 
 /* Las siguientes clases son para la sección de ESTADO */

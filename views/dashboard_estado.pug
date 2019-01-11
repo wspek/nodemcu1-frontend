@@ -1,16 +1,19 @@
 extends dashboard_index.pug
 
 block append head
-    script(src='/public/scripts/update_state.js', onLoad='setInterval(window.alert("Hola"), 3000)')
+    script(type='text/javascript', src='/public/scripts/update_state.js')
+
 
 block seccionEstado
     h2(class="text-center") Estado Actual
     p 
-        span(class='etiquetaEstado') LED:&nbsp;
-            span(class='valorEstado', id='ledState')= estado.ledState==1?'Encendido':'Apagado'
+        span(class='etiquetaEstado') LED Verde:&nbsp;
+            span(class='valorEstado', id='greenLedState')= estado.greenLedState==1?'Encendido':'Apagado'
     p
         span(class='etiquetaEstado') Intervalo de Envío de mediciones [seg]:&nbsp;
-            span(class='valorEstado')= (estado.msInterval/1000.0)
+            span(class='valorEstado', id='msInterval')= (estado.msInterval/1000.0)
+
+    button(id='btnRefresh').btn.btn-primary(type='button') Actualizar
 
     //-#result(onLoad="setUpdate()")
 

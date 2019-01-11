@@ -22,16 +22,17 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 // Coloco capa middleware para servir archivos estáticos con express.static()
-app.use('/public', express.static('public'));
+//app.use('/public', express.static('public'));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 /* However, the path that you provide to the express.static function is relative 
  * to the directory from where you launch your node process. If you run the express 
  * app from another directory, it’s safer to use the absolute path of the directory 
