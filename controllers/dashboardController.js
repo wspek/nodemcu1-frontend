@@ -19,29 +19,31 @@ db.settings({timestampsInSnapshots: true});
 
 exports.index = function(req, res, next) {
 
-//    res.render('dashboard_estado', {estado: {"greenLedState": 1, "bicolorLedState": 0, "msInterval": 30000}});
+    // Para que funcione en Google app debe enviarse solamente la pagina
+    // y dejar la actualizacion a la misma.
+    res.render('dashboard_estado', {estado: {"greenLedState": 0, "bicolorLedState": 0, "msInterval": 0}});
 
-  //Step 1 - Set the headers
-var headers = {
-  'User-Agent':       'Super Agent/0.0.1',
-  'Content-Type':     'application/json'
-}
+//   //Step 1 - Set the headers
+// var headers = {
+//   'User-Agent':       'Super Agent/0.0.1',
+//   'Content-Type':     'application/json'
+// }
 
-//Step 2 - Configure the request
-var options = {
-  url     : 'http://localhost:3000/api/lastState/nodemcu1',
-  method  : 'GET',
-  jar     : false,
-  headers : headers
-}
+// //Step 2 - Configure the request
+// var options = {
+//   url     : 'http://localhost:3000/api/lastState/nodemcu1',
+//   method  : 'GET',
+//   jar     : false,
+//   headers : headers
+// }
 
-//Step 3 - do the request
-request(options, function (error, response, body) {
-  if (!error && response.statusCode == 200) {
-      console.log(body);
-      res.render('dashboard_estado', {estado: JSON.parse(body)});
-  }
-});
+// //Step 3 - do the request
+// request(options, function (error, response, body) {
+//   if (!error && response.statusCode == 200) {
+//       console.log(body);
+//       res.render('dashboard_estado', {estado: JSON.parse(body)});
+//   }
+// });
 
     // // Lo siguiente funciona, lo deshabilito para seguir desarrollando
     //   var measurementsRef = db.collection("devices").doc("nodemcu1").collection("measurements").orderBy('timestamp', "desc").limit(1);
