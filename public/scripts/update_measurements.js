@@ -6,7 +6,8 @@ function loadLastMeasurement() {
         type: 'GET',
         datatype: 'json',
         success: function( result ) {
-            $('#timestamp').html(result.timestamp);
+            var date = new Date(result.timestamp * 1000);
+            $('#timestamp').html(date.toLocaleString());
             $('#temperatura').html(`${result.temperature} ºC`);
             $('#humedad').html(`${result.humity} %`);
             $('#wifiSignal').html(`${result.wifiSignal} dB`);
@@ -15,5 +16,5 @@ function loadLastMeasurement() {
     });
 }
 
-$( window ).on( "load", function() { intervalHandler1 = window.setInterval(() => {loadLastMeasurement();}, 1000); });
+$( window ).on( "load", function() { intervalHandler1 = window.setInterval(() => {loadLastMeasurement();}, 5000); });
 $( window ).on( "unload", function() { window.clearInterval(intervalHandler1); });
