@@ -1,11 +1,11 @@
 extends dashboard_index.pug
 
 block append head
-    script(type='text/javascript', src='/public/scripts/update_state.js')
+    script(type='text/javascript', src='/public/scripts/update_measurements.js')
 
 
-block seccionEstado
-    h2(class="text-center") Estado Actual
+block seccionGrafico
+    h2(class="text-center") Mediciones
     p 
         span(class='etiquetaEstado') LED Verde:&nbsp;
             span(class='valorEstado', id='greenLedState')= estado.greenLedState==1?'Encendido':'Apagado'
@@ -14,6 +14,4 @@ block seccionEstado
             span(class='valorEstado', id='msInterval')= (estado.msInterval/1000.0)
 
     button(id='btnRefresh').btn.btn-primary(type='button') Actualizar
-
-    //-#result(onLoad="setUpdate()")
 

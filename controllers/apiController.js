@@ -1,177 +1,32 @@
 const async = require('async');
 
+
 /* Necesario para Google */
 const {google} = require('googleapis');
-const jwt = require('jsonwebtoken');
-const fs = require('fs');
+//const jwt = require('jsonwebtoken');
+//const fs = require('fs');
 const API_VERSION = 'v1';
 const DISCOVERY_API = 'https://cloudiot.googleapis.com/$discovery/rest';
-
 const PROJECT_ID = 'e-charger-218218'
 const REGISTRY_ID = 'kaizenIT-test';
 const CLOUD_REGION = 'us-central1';
 
 
-
-// Returns an authorized API client by discovering the Cloud IoT Core API with
-// the provided API key.
-function getClient (serviceAccountJson, callback) {
-    console.log("Inicio en getClient...");
-    // Usa Promise...
-    google.auth.getClient({
-      scopes: ['https://www.googleapis.com/auth/cloud-platform']
-    }).then((authClient) => {
-      const discoveryUrl = `${DISCOVERY_API}?version=${API_VERSION}`;
-  
-      google.options({
-        auth: authClient
-      });
-  
-      google.discoverAPI(discoveryUrl).then((client) => {
-        callback(client);
-      }).catch((err) => {
-        console.log('Error during API discovery.', err);
-      });
-    });
-
-    console.log("FINAL en getClient...");
-}
+/* Necesario para Firebase */
+/* Autenticación cuando se trata de un servidor propio */ 
+/* Ver mas en: https://firebase.google.com/docs/firestore/quickstart?authuser=0 */
+const admin = require('firebase-admin');
+var serviceAccount = require('../e-charger-218218-serviceaccount.json');
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://e-charger-218218.firebaseio.com"
+});
+var db = admin.firestore();
+// La siguiente linea evita el mensaje largo de rutura y comportamiento....
+db.settings({timestampsInSnapshots: true});
 
 
-var stack = [];
-var ultimoEstado = function (callback) {
-  console.log("Solicitando Credenciales...");
-  // Usa Promise...
-  google.auth.getClient({
-    scopes: ['https://www.googleapis.com/auth/cloud-platform']
-  }).then((authClient) => {
-    const discoveryUrl = `${DISCOVERY_API}?version=${API_VERSION}`;
-
-    google.options({
-      auth: authClient
-    });
-
-    google.discoverAPI(discoveryUrl).then((client) => {
-      // Tenemos la credencial, ahora llamamos a la api de lista
-      getDeviceState(
-        client,
-        'nodemcu1',
-        'kaizenIT-test',
-        'e-charger-218218',
-        'us-central1',
-        (err, lastState) => {
-            if(err) {
-                console.err("Error obteniendo estados del dispositivo");
-                callback(err, null)
-            } else {
-                //console.log(lastState);
-                callback(null, lastState);
-            }
-        }
-        );
-
-
-      //console.log("ANTES FINAL en getClient...");
-      //callback(null, client);
-    
-    
-    }).catch((err) => {
-      console.log('Error during API discovery.', err);
-    });
-  });
-}
-stack.push(ultimoEstado);
-
-
-
-
-
-// Retrieve the given device's state from the registry.
-function getDeviceState (
-    client,
-    deviceId,
-    registryId,
-    projectId,
-    cloudRegion,
-    callbackState
-  ) {
-    // [START iot_get_device_state]
-    // Client retrieved in callback
-    // getClient(serviceAccountJson, function(client) {...});
-    // const cloudRegion = 'us-central1';
-    // const deviceId = 'my-device';
-    // const projectId = 'adjective-noun-123';
-    // const registryId = 'my-registry';
-    const parentName = `projects/${projectId}/locations/${cloudRegion}`;
-    const registryName = `${parentName}/registries/${registryId}`;
-    const request = {
-      name: `${registryName}/devices/${deviceId}`
-    };
-  
-    client.projects.locations.registries.devices.states.list(request,
-      (err, data) => {
-        if (err) {
-          console.err('Could not find device:', deviceId);
-          console.err(err);
-          callbackState(err, null);
-
-        } else {
-          //console.log('State:', data.data);
-
-          var estado1 = Buffer.from(data.data['deviceStates'][0]['binaryData'], 'base64');
-          var estado = JSON.parse(estado1);
-
-          callbackState(null, estado);
-        }
-      });
-    // [END iot_get_device_state]
-  }
-  
-// Send configuration data to device.
-function setDeviceConfig (
-    client,
-    deviceId,
-    registryId,
-    projectId,
-    cloudRegion,
-    data,
-    version
-  ) {
-    // [START iot_set_device_config]
-    // Client retrieved in callback
-    // getClient(serviceAccountJson, function(client) {...});
-    // const cloudRegion = 'us-central1';
-    // const deviceId = 'my-device';
-    // const projectId = 'adjective-noun-123';
-    // const registryId = 'my-registry';
-    // const data = 'test-data';
-    // const version = 0;
-    const parentName = `projects/${projectId}/locations/${cloudRegion}`;
-    const registryName = `${parentName}/registries/${registryId}`;
-  
-    const binaryData = Buffer.from(data).toString('base64');
-    const request = {
-      name: `${registryName}/devices/${deviceId}`,
-      versionToUpdate: version,
-      binaryData: binaryData
-    };
-  
-    client.projects.locations.registries.devices.modifyCloudToDeviceConfig(request,
-      (err, data) => {
-        if (err) {
-          console.err('Could not update config:', deviceId);
-          console.err('Message: ', err);
-        } else {
-          console.log('Success :', data);
-        }
-      });
-    // [END iot_set_device_config]
-  }
-  
-
-
-
-
+/* Read From Google Cloud IoT Core the last State */
 exports.lastState = function(req, res, next) {
     const deviceId = req.params.deviceId;
     const parentName = `projects/${PROJECT_ID}/locations/${CLOUD_REGION}`;
@@ -217,6 +72,7 @@ exports.lastState = function(req, res, next) {
 };
 
 
+/* Send to Google Cloud IoT Core a new device configuration */
 exports.lastState_post = function(req, res, next) {
   const deviceId = req.params.deviceId;
   const parentName = `projects/${PROJECT_ID}/locations/${CLOUD_REGION}`;
@@ -227,9 +83,6 @@ exports.lastState_post = function(req, res, next) {
     bicolorLedState: req.body.bicolorLedState,
     msInterval: req.body.msInterval 
   };
-
-  //res.send(JSON.stringify(data));
-
 
   google.auth.getClient({
       scopes: ['https://www.googleapis.com/auth/cloud-platform']
@@ -269,5 +122,24 @@ exports.lastState_post = function(req, res, next) {
 };
 
 
-      
+/* Read From Google Cloud IoT Core the last State */
+exports.lastMeasurement = function(req, res, next) {
+  const deviceId = req.params.deviceId;
+  var measurementsRef = db.collection("devices").doc(deviceId).collection("measurements").orderBy("timestamp", "desc").limit(1);
+
+  measurementsRef.get()
+    .then((snapshot) => {
+      // Only would be one record
+      snapshot.forEach((doc) => {
+        console.log(doc.id, '=>', doc.data());
+        //res.json(doc);
+        res.json(doc.data());
+      });
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);
+        res.json( { error: `${err}` } );
+    });
+}      
+
 

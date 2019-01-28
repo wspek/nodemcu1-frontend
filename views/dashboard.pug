@@ -1,0 +1,70 @@
+extends layout.pug
+
+block append head
+  script(type='text/javascript', src='/public/scripts/update_state.js')
+  script(type='text/javascript', src='/public/scripts/update_measurements.js')
+
+block content
+  div(class='row')
+    div(class='col')
+      block seccionGrafico
+        h2(class="text-center") Mediciones
+        div(id="lastMeasurements")
+          p
+            span(class='etiquetaEstado') Timestamp:&nbsp;
+              span(class='valorEstado', id='timestamp')= lastMeasurement.timestamp
+          p
+            span(class='etiquetaEstado') Temperatura:&nbsp;
+              span(class='valorEstado', id='temperatura')= lastMeasurement.temperature
+          p
+            span(class='etiquetaEstado') Humedad:&nbsp;
+              span(class='valorEstado', id='humedad')= lastMeasurement.humity
+          p
+            span(class='etiquetaEstado') Wifi Signal:&nbsp;
+              span(class='valorEstado', id='wifiSignal')= lastMeasurement.wifiSignal
+        hr
+  
+  div(class='row')
+    div(class='col')
+      block seccionEstado
+        h2(class="text-center") Estado Actual
+        p 
+          span(class='etiquetaEstado') LED Verde:&nbsp;
+            span(class='valorEstado', id='greenLedState')= estado.greenLedState==1?'Encendido':'Apagado'
+        p
+          span(class='etiquetaEstado') Intervalo de Envío de mediciones [seg]:&nbsp;
+            span(class='valorEstado', id='msInterval')= (estado.msInterval/1000.0)
+        
+        button(id='btnRefresh').btn.btn-primary(type='button') Actualizar
+    
+
+    div(class='col')
+      block seccionConfiguracion
+        h2(class="text-center") Sección de Configuración
+        form(method='POST', action='')
+          div.form-group
+            label(for='led_state') Estado del LED:
+            select#led_state.form-control(type='select' placeholder='Seleccione Estado' name='led_state' required='true')
+              option(value='0') Apagado
+              option(value='1') Endendido
+          div.form-group
+            label(for='interval') Intervalo de envío de las mediciones [segundos]:
+            input#interval.form-control(type='number' placeholder='Intervalo en segundos' name='interval' required='true' min='1' max='600' value='300')
+          button.btn.btn-primary(type='submit') Enviar
+        
+        if errors 
+          ul
+            for error in errors
+              li!= error.msg       
+
+
+//-  hr
+//-  h2 Measurement Documents in Firebase
+//-  ul
+//-    each doc in doc_list
+//-      li 
+//-        a(href=doc.id) #{doc.id}
+//-
+//-
+//-    else
+//-      li There are no documents to list.

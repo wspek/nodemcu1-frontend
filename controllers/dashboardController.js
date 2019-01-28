@@ -4,24 +4,24 @@ const request = require('request');
 const async = require('async');
 
 
-/* Autenticación cuando se trata de un servidor propio */ 
-/* Ver mas en: https://firebase.google.com/docs/firestore/quickstart?authuser=0 */
-const admin = require('firebase-admin');
-var serviceAccount = require('../e-charger-218218-serviceaccount.json');
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://e-charger-218218.firebaseio.com"
-});
-var db = admin.firestore();
-// La siguiente linea evita el mensaje largo de rutura y comportamiento....
-db.settings({timestampsInSnapshots: true});
+// /* Autenticación cuando se trata de un servidor propio */ 
+// /* Ver mas en: https://firebase.google.com/docs/firestore/quickstart?authuser=0 */
+// const admin = require('firebase-admin');
+// var serviceAccount = require('../e-charger-218218-serviceaccount.json');
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: "https://e-charger-218218.firebaseio.com"
+// });
+// var db = admin.firestore();
+// // La siguiente linea evita el mensaje largo de rutura y comportamiento....
+// db.settings({timestampsInSnapshots: true});
 
 
 exports.index = function(req, res, next) {
 
     // Para que funcione en Google app debe enviarse solamente la pagina
     // y dejar la actualizacion a la misma.
-    res.render('dashboard_estado', {estado: {"greenLedState": 0, "bicolorLedState": 0, "msInterval": 0}});
+    res.render('dashboard', {estado: {"greenLedState": 0, "bicolorLedState": 0, "msInterval": 0}, lastMeasurement: {timestamp: 0, temperature: 0, humity: 0, wifiSignal: 0}});
 
 //   //Step 1 - Set the headers
 // var headers = {
