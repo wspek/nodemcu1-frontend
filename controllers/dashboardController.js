@@ -3,6 +3,9 @@ const { sanitizeBody } = require('express-validator/filter');
 const request = require('request');
 const async = require('async');
 
+const Chart = require('chart.js');
+//var myChart = new Chart(ctx, {...});
+
 
 // /* Autenticación cuando se trata de un servidor propio */ 
 // /* Ver mas en: https://firebase.google.com/docs/firestore/quickstart?authuser=0 */

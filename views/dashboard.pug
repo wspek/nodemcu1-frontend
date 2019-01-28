@@ -1,28 +1,37 @@
 extends layout.pug
 
 block append head
+  script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js')
   script(type='text/javascript', src='/public/scripts/update_state.js')
   script(type='text/javascript', src='/public/scripts/update_measurements.js')
 
 block content
   div(class='row')
     div(class='col')
-      block seccionGrafico
-        h2(class="text-center") Mediciones
-        div(id="lastMeasurements")
-          p
-            span(class='etiquetaEstado') Timestamp:&nbsp;
-              span(class='valorEstado', id='timestamp')= lastMeasurement.timestamp
-          p
-            span(class='etiquetaEstado') Temperatura:&nbsp;
-              span(class='valorEstado', id='temperatura')= lastMeasurement.temperature
-          p
-            span(class='etiquetaEstado') Humedad:&nbsp;
-              span(class='valorEstado', id='humedad')= lastMeasurement.humity
-          p
-            span(class='etiquetaEstado') Wifi Signal:&nbsp;
-              span(class='valorEstado', id='wifiSignal')= lastMeasurement.wifiSignal
-        hr
+      h2(class="text-center") Mediciones
+
+      div(class='row')
+        div(class='col', id="lastMeasurements")
+          block seccionLastMeasurement
+            p
+              span(class='etiquetaEstado') Timestamp:&nbsp;
+                span(class='valorEstado', id='timestamp')= lastMeasurement.timestamp
+            p
+              span(class='etiquetaEstado') Temperatura:&nbsp;
+                span(class='valorEstado', id='temperatura')= lastMeasurement.temperature
+            p
+              span(class='etiquetaEstado') Humedad:&nbsp;
+                span(class='valorEstado', id='humedad')= lastMeasurement.humity
+            p
+              span(class='etiquetaEstado') Wifi Signal:&nbsp;
+                span(class='valorEstado', id='wifiSignal')= lastMeasurement.wifiSignal
+      
+        div(class='col', id="graphic")
+          block seccionGrafico
+            canvas(id="temperatureChart")
+      
+      hr
+
   
   div(class='row')
     div(class='col')
@@ -34,9 +43,7 @@ block content
         p
           span(class='etiquetaEstado') Intervalo de Envío de mediciones [seg]:&nbsp;
             span(class='valorEstado', id='msInterval')= (estado.msInterval/1000.0)
-        
-        button(id='btnRefresh').btn.btn-primary(type='button') Actualizar
-    
+            
 
     div(class='col')
       block seccionConfiguracion
