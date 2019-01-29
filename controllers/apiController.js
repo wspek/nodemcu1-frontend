@@ -78,11 +78,13 @@ exports.lastState_post = function(req, res, next) {
   const parentName = `projects/${PROJECT_ID}/locations/${CLOUD_REGION}`;
   const registryName = `${parentName}/registries/${REGISTRY_ID}`;
 
-  const data = { 
+  /*const data = { 
     greenLedState: req.body.greenLedState,
     bicolorLedState: req.body.bicolorLedState,
     msInterval: req.body.msInterval 
-  };
+  };*/
+
+  const data = req.body;
 
   google.auth.getClient({
       scopes: ['https://www.googleapis.com/auth/cloud-platform']
@@ -107,22 +109,22 @@ exports.lastState_post = function(req, res, next) {
             if (err) {
               console.log('Could not update config:', deviceId);
               console.log('Message: ', err);
-              res.json( { error: `Could not update config: ${err}` } );
+              res.json( { "result": "ERROR", "error": `Could not update config: ${err}` } );
             } else {
               console.log('Success :', data);
-              res.json({ "result": 'OK', "error": 0, "data": data.data });
+              res.json({ "result": "OK", "error": "No ERROR", "data": data.data });
             }
           });
 
       }).catch((err) => {
         console.log('Error during API discovery.', err);
-        res.json( { error: `Error during API discovery: ${err}` } );
+        res.json( { "result": "ERROR", "error": `Error during API discovery: ${err}` } );
       });
     });
 };
 
 
-/* Read From Google Cloud IoT Core the last State */
+/* Read From Firebase the last State */
 exports.lastMeasurement = function(req, res, next) {
   const deviceId = req.params.deviceId;
   var measurementsRef = db.collection("devices").doc(deviceId).collection("measurements").orderBy("timestamp", "desc").limit(1);

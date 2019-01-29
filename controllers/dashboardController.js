@@ -24,7 +24,7 @@ exports.index = function(req, res, next) {
 
     // Para que funcione en Google app debe enviarse solamente la pagina
     // y dejar la actualizacion a la misma.
-    res.render('dashboard', {estado: {"greenLedState": 0, "bicolorLedState": 0, "msInterval": 0}, lastMeasurement: {timestamp: 0, temperature: 0, humity: 0, wifiSignal: 0}});
+    res.render('dashboard', {estado: {"greenLedState": 0, "bicolorLedState": 0, "msInterval": 0}, lastMeasurement: {"timestamp": 0, "temperature": 0, "humity": 0, "wifiSignal": 0}});
 
 //   //Step 1 - Set the headers
 // var headers = {
@@ -80,38 +80,6 @@ exports.config_form_post = [
         // Extract the validation errors from a request.
         const errors = validationResult(req);
 
-        var newConfig = {"greenLedState": req.body.led_state, "bicolorLedState": 0, "msInterval": (req.body.interval*1000)};
-
-        const cb = function (client) {
-        setDeviceConfig(
-            client,
-            'nodemcu1',
-            'kaizenIT-test',
-            'e-charger-218218',
-            'us-central1',
-            JSON.stringify(newConfig), // '{"ledState": ' + req.body.led_state + ', "msInterval": ' + (req.body.led_state * 1000) + '}',
-            0
-            );
-        };
-        getClient('../e-charger-218218-serviceaccount.json', cb);
-
-
-
-
-
-
-        //console.log(req.body.led_state);
-        //res.send("Led State Required: ", req.body.led_state);
-        //res.status(status).send(body)
-
-        // // Create a BookInstance object with escaped and trimmed data.
-        // var bookinstance = new BookInstance(
-        //   { book: req.body.book,
-        //     imprint: req.body.imprint,
-        //     status: req.body.status,
-        //     due_back: req.body.due_back
-        //    });
-
         if (!errors.isEmpty()) {
             // // There are errors. Render form again with sanitized values and error messages.
             // Book.find({},'title')
@@ -122,10 +90,7 @@ exports.config_form_post = [
             // });
 
             //res.send("ERROR ");
-            return;
-        }
-        else {
-
+        } else {
             res.send("TODO OK ");
             // // Data from form is valid.
             // bookinstance.save(function (err) {
@@ -133,11 +98,7 @@ exports.config_form_post = [
             //        // Successful - redirect to new record.
             //        res.redirect(bookinstance.url);
             //     });
-
-
-
         }
-
     }
     
 ];
