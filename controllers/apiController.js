@@ -3,8 +3,8 @@ const async = require('async');
 
 /* Necesario para Google */
 const {google} = require('googleapis');
-//const jwt = require('jsonwebtoken');
-//const fs = require('fs');
+const jwt = require('jsonwebtoken');
+const fs = require('fs');
 const API_VERSION = 'v1';
 const DISCOVERY_API = 'https://cloudiot.googleapis.com/$discovery/rest';
 const PROJECT_ID = 'e-charger-218218'
@@ -127,7 +127,7 @@ exports.lastState_post = function(req, res, next) {
 /* Read From Firebase the last State */
 exports.lastMeasurement = function(req, res, next) {
   const deviceId = req.params.deviceId;
-  var measurementsRef = db.collection("devices").doc(deviceId).collection("measurements").orderBy("timestamp", "desc").limit(1);
+  var measurementsRef = db.collection("devices").doc(deviceId).collection("measurements").orderBy("timestampg", "desc").limit(1);
 
   measurementsRef.get()
     .then((snapshot) => {
@@ -144,4 +144,27 @@ exports.lastMeasurement = function(req, res, next) {
     });
 }      
 
+/* Read From Firebase LAST N MEASUREMENTS */
+exports.measurements = function(req, res, next) {
+  const deviceId = req.params.deviceId;
+  const numberOfMeasurements = req.query.nom;
+  var measurementsRef = db.collection("devices").doc(deviceId).collection("measurements").orderBy("timestampg", "desc").limit(3);
+
+  //console.log(`nom = ${numberOfMeasurements}`);
+
+  measurementsRef.get()
+    .then((snapshot) => {
+      // Only would be one record
+      res.json(snapshot.val());
+      snapshot.forEach((doc) => {
+        console.log(doc.id, '=>', doc.data());
+        //res.json(doc);
+        //res.json(doc.data());
+      });
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);
+        res.json( { error: `${err}` } );
+    });
+}      
 

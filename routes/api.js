@@ -12,6 +12,8 @@ router.post('/lastState/:deviceId', api_controller.lastState_post);
 
 /* GET Last Measurement from Firebase. */
 router.get('/lastMeasurement/:deviceId', api_controller.lastMeasurement);
+/* GET Lastest N Measurements from Firebase */
+router.get('/measurements/:deviceId', api_controller.measurements);
 
 
 

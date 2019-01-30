@@ -1,19 +1,36 @@
+/* Mirar el siguiente video para dar estilo :
+https://www.youtube.com/watch?v=U93QmUQAm48
+*/
 body {
+  margin: 0;
   /*padding: 50px;*/
   /*font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;*/
-  font: Roboto;
+  font: Roboto, sans-serif;
   background-color: rgb(255, 255, 255);
 }
 
-a {
-  color: #00B7FF;
-}
-
 .sidebar-nav {
-  margin-top: 20px;
+  margin-top: 0;
   padding: 0;
   list-style: none;
 }
+
+.sidebar-nav li {
+  /*border: 1px solid rgb(0, 118, 197);*/
+  margin-bottom: 10px;
+  font-size: 20pt;
+  text-align: left;
+  line-height: 20px;
+  width: 100%;
+}
+
+.sidebar-nav a {
+  display: block;
+  color: rgb(0, 118, 197);
+  width: 100%;
+}
+
+
 
 .tituloPrincipal {
   width: 100%;
@@ -37,4 +54,19 @@ a {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+
+/* Rules for sizing the icon. */
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
+
+/* Rules for using icons as black on a light background. */
+.material-icons.md-dark { color: rgba(0, 118, 197, 0.54); }
+.material-icons.md-dark.md-inactive { color: rgba(0, 118, 197, 0.26); }
+
+/* Rules for using icons as white on a dark background. */
+.material-icons.md-light { color: rgba(255, 255, 255, 1); }
+.material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
 
