@@ -1,5 +1,11 @@
-To run the application in debug mode:
-On Linux: DEBUG=nodemcu1-frontend:* npm run devstart
+Running locally:
+================
+To run the application locally, perform the following steps:
+
+* Install Google Cloud SDK. See: https://cloud.google.com/sdk/install
+* Install the necessary NodeJS packages, by executing a `npm install` in the folder containing package.json.
+* To run the app locally in debug mode, execute the custom shell script `devstart.sh`.
+* The application can be accessed by http://localhost:3000
 
 
 2019-02-13
