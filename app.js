@@ -5,6 +5,7 @@ var logger = require('morgan');
 var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
@@ -29,6 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors())     // TODO: We should add origin restrictions. See https://bit.ly/2N8bYWv
 
 // Coloco capa middleware para servir archivos estáticos con express.static()
 //app.use('/public', express.static('public'));
